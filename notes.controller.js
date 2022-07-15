@@ -1,4 +1,3 @@
-
 const fs =require('fs/promises')
 const path = require('path')
 const chalk = require('chalk')
@@ -27,10 +26,18 @@ async function printNotes () {
     const notes = await getNotes()
     console.log(chalk.bgBlue('here is the list of notes'))
     notes.forEach(note => {
-        console.log(chalk.blue(note.title))
+        console.log(chalk.blue(note.title, ' id:' ,note.id))
     });
 }
 
+async function deleteNotedById (id) {
+    const notes = await getNotes()
+    const newNotes = notes.filter(x=> x.id !== id )
+
+   await fs.writeFile(notesPath, JSON.stringify(newNotes))
+   console.log(chalk.bgGreen('note has deleted'))
+}
+
 module.exports = {
-    addNote, printNotes
+    addNote, printNotes, deleteNotedById
 }
